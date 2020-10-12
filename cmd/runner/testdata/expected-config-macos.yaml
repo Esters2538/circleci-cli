@@ -1,0 +1,14 @@
+api:
+    auth_token: 1a34e5519976717fb808ad8900cadbecc686facee3f9ca56c5ba1ad30e50cab7e5fa328409065c64
+runner:
+    # A friendly name to refer to this runner instance as
+    name: "the-nickname"
+    # Action required: Set the USERNAME
+    command_prefix: ["sudo", "-niHu", "USERNAME", "--"]
+    # The working directory
+    working_directory: "/tmp/%s"
+    # Automatically delete the job working directories
+    cleanup_working_directory: true
+logging:
+    # Write runner logs to this file, logs will automatically be rotated by runner
+    file: "/Library/Logs/com.circleci.runner.log"

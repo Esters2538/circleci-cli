@@ -1,0 +1,11 @@
+api:
+    auth_token: 1a34e5519976717fb808ad8900cadbecc686facee3f9ca56c5ba1ad30e50cab7e5fa328409065c64
+runner:
+    # A friendly name to refer to this runner instance as
+    name: "the-nickname"
+    # This refers to the the systemd launch-wrapper the install instructions recommend
+    command_prefix: ["/opt/circleci/launch-task"]
+    # Auto-generated working directory for jobs, can be automatically deleted
+    working_directory: "/opt/circleci/workdir/%s"
+    # Automatically delete the job working directories
+    cleanup_working_directory: true

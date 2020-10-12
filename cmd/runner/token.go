@@ -17,7 +17,7 @@ func newTokenCommand(r *runner.Runner, preRunE validator) *cobra.Command {
 	}
 
 	createOpts := struct {
-		config bool
+		platform string
 	}{}
 	createCmd := &cobra.Command{
 		Use:     "create <resource-class> <nickname>",
@@ -29,19 +29,10 @@ func newTokenCommand(r *runner.Runner, preRunE validator) *cobra.Command {
 			if err != nil {
 				return err
 			}
-
-			if createOpts.config {
-				return NewAgentConfig(*token).WriteYaml(os.Stdout)
-			}
-
-			table := tablewriter.NewWriter(os.Stdout)
-			defer table.Render()
-			table.SetHeader([]string{"ID", "Token", "Nickname", "Created At"})
-			table.Append([]string{token.ID, token.Token, token.Nickname, token.CreatedAt.Format(time.RFC3339)})
-			return nil
+			return generateConfig(*token, createOpts.platform, os.Stdout)
 		},
 	}
-	createCmd.Flags().BoolVar(&createOpts.config, "config", false, "'true' to emit a CircleCI runner config template with the token")
+	createCmd.Flags().StringVar(&createOpts.platform, "platform", "minimal", "'minimal', 'macos', 'linux' to generate a recommended config for the specified platform")
 	cmd.AddCommand(createCmd)
 
 	cmd.AddCommand(&cobra.Command{
