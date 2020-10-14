@@ -417,7 +417,7 @@ type Orb struct {
 	Categories []OrbCategory
 }
 
-// Shortname returns the orb name without its associated namespace.
+// AddShortName returns the orb name without its associated namespace.
 func (o *Orb) AddShortName() error {
 	_, orbName, err := references.SplitIntoOrbAndNamespace(o.Name)
 	if err != nil {
@@ -1210,12 +1210,13 @@ func OrbSource(cl *graphql.Client, orbRef string) (string, error) {
 	return response.OrbVersion.Source, nil
 }
 
-// ErrOrbVersionNotExists ...
+// ErrOrbVersionNotExists is a custom error type that communicates that
+// an orb version was not found.
 type ErrOrbVersionNotExists struct {
 	OrbRef string
 }
 
-// Error ...
+// Error implements the standard error interface.
 func (e *ErrOrbVersionNotExists) Error() string {
 	return fmt.Sprintf("no Orb '%s' was found; please check that the Orb reference is correct", e.OrbRef)
 }
@@ -1368,7 +1369,8 @@ query ListOrbs ($after: String!, $certifiedOnly: Boolean!) {
 	return &orbs, nil
 }
 
-// ListNamespaceOrbVersions ...
+// ListNamespaceOrbVersions queries the API to retrieve the orbs belonging to the given namespace.
+// By default, this call fetches the latest version of each orb.
 func ListNamespaceOrbVersions(cl *graphql.Client, namespace string) ([]OrbVersion, error) {
 	query := `
 query namespaceOrbs ($namespace: String, $after: String!) {
